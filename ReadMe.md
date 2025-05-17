@@ -4,7 +4,7 @@
 
 An enterprise-grade n8n automation that:
 
-1. 📥 Reads unprocessed contacts from Google Sheets  
+1. 📥 Reads unprocessed contacts from Google Sheets ([Google Sheet](https://docs.google.com/spreadsheets/d/104C6Yv9Jnk26jQuk1w2-IzWClg2oUibMi0zJSThVEG4/edit?gid=0#gid=0))
 2. 🤖 Generates personalized emails using Llama-3-8B via OpenRouter  
 3. 🔄 Updates records with AI-generated content  
 4. ✅ Maintains processing status to prevent duplicates  
