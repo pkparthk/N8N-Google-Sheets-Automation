@@ -1,6 +1,6 @@
 # Automated Welcome Email Generator
 
-![Workflow Overview](workflow.png)
+![Workflow Overview](Workflow.png)
 
 An enterprise-grade n8n automation that:
 
