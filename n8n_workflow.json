@@ -1,0 +1,268 @@
+{
+  "name": "Google Sheets",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -180,
+        0
+      ],
+      "id": "73393132-2b87-4a52-b234-d0397291382e",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "104C6Yv9Jnk26jQuk1w2-IzWClg2oUibMi0zJSThVEG4",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/104C6Yv9Jnk26jQuk1w2-IzWClg2oUibMi0zJSThVEG4/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "not-send"
+            }
+          ]
+        },
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "specifyRangeA1",
+              "range": "A:D"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        40,
+        0
+      ],
+      "id": "2b85dcc2-9c96-44cd-9b1e-1b87571460ac",
+      "name": "Read Google Sheet Rows",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KDl9lUMj9GHrqnEm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.OPENROUTER_API_KEY}}"
+            },
+            {
+              "name": "HTTP-Referer",
+              "value": "https://n8n.io"
+            },
+            {
+              "name": "X-Title",
+              "value": "Welcome Email Generator"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"meta-llama/llama-3.3-8b-instruct:free\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Generate a welcome email for {{ $json['Name'] }}. Keep it under 300 words. Use a friendly tone.\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ],
+      "id": "d94dd6d2-0de5-4742-9b50-1ce538e719cc",
+      "name": "HTTP Request",
+      "alwaysOutputData": false,
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "104C6Yv9Jnk26jQuk1w2-IzWClg2oUibMi0zJSThVEG4",
+          "mode": "list",
+          "cachedResultName": "Welcome Email Generator",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/104C6Yv9Jnk26jQuk1w2-IzWClg2oUibMi0zJSThVEG4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/104C6Yv9Jnk26jQuk1w2-IzWClg2oUibMi0zJSThVEG4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Content",
+              "displayName": "Content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        720,
+        0
+      ],
+      "id": "1b7ccfce-0b95-453b-a01a-319258b2ce7f",
+      "name": "Update Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KDl9lUMj9GHrqnEm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input1 = $input.all().map((item) => item.json);\nconst input2 = $(\"Read Google Sheet Rows\")\n  .all()\n  .map((item) => item.json);\n\nconst merged = input1.map((item1, index) => {\n  const item2 = input2[index];\n  return {\n    Email: item2.Email,\n    Name: item2.Name,\n    Status: \"send\",\n    Content:\n      Array.isArray(item1.choices) &&\n      item1.choices[0] &&\n      item1.choices[0].message &&\n      item1.choices[0].message.content\n        ? item1.choices[0].message.content\n        : \"\",\n  };\n});\n\nreturn merged;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ],
+      "id": "35c854c5-5375-4379-baf8-5c01fd97bc3c",
+      "name": "Code"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read Google Sheet Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Google Sheet Rows": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Sheets": {
+      "main": [
+        []
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Update Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "001fb404-5ca6-4b58-8735-885b989a1bd8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "be990d407b3537389a316ee60f73bdd81e495420f355892ae0e0975d762a3d85"
+  },
+  "id": "djjQToiPqqnrtfWj",
+  "tags": []
+}
